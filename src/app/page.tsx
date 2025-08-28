@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full min-h-screen font-sans bg-gray-900 text-gray-100 p-6">
+    <main className="flex flex-col items-center justify-center w-full min-h-screen font-sans bg-gradient-to-br from-indigo-950 to-purple-950 text-gray-100 p-6">
       <GitoLoader isLoading={isPageLoading} />
 
       <AnimatePresence mode="wait">
@@ -35,15 +35,21 @@ const Home: React.FC = () => {
               className="w-full max-w-3xl flex flex-col items-center mb-40"
             >
               <div className="w-full flex flex-col items-center">
-                <Image src={"/gito.png"} alt="logo" width={192} height={192} />
-                <h1 className="mb-2 text-4xl font-extrabold text-white">
+                <Image
+                  src={"/gito.png"}
+                  alt="logo"
+                  width={192}
+                  height={192}
+                  className="rounded-full shadow-lg shadow-indigo-500/20 mb-4"
+                />
+                <h1 className="mb-2 text-4xl font-extrabold text-white tracking-tight">
                   Gito Search
                 </h1>
-                <p className="mb-6 text-lg text-gray-400">
+                <p className="mb-6 text-lg text-indigo-100/80">
                   Find developers across the globe
                 </p>
 
-                <div className="w-full max-w-2xl relative">
+                <div className="w-full max-w-2xl relative rounded-2xl p-4">
                   <SearchBar />
                   <SuggestionBar />
                 </div>

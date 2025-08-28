@@ -44,7 +44,6 @@ const SuggestionBar: React.FC = () => {
 
   return (
     <AnimatePresence>
-      {/* only render when we have suggestions */}
       {users?.length > 0 && (
         <motion.div
           key="suggestions"
@@ -52,16 +51,14 @@ const SuggestionBar: React.FC = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8, scale: 0.995 }}
           transition={{ duration: 0.16, ease: "easeOut" }}
-          // absolute positioning so it doesn't change document flow
           className="absolute left-0 right-0 top-full mt-2 z-40"
           style={{ transformOrigin: "top center" }}
         >
-          {/* container that won't block clicks outside; the list itself is interactive */}
           <div className="pointer-events-none px-2">
             <ul
               role="listbox"
               aria-label="Search suggestions"
-              className="pointer-events-auto w-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-lg max-h-60 overflow-y-auto shadow-xl divide-y divide-white/4"
+              className="pointer-events-auto w-full bg-gray-800/10 backdrop-blur-sm border border-gray-700 rounded-lg max-h-60 overflow-y-auto shadow-xl divide-y divide-white/4"
             >
               {users.map((user) => (
                 <li key={user.id}>

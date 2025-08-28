@@ -50,15 +50,20 @@ const UserProfileCard: React.FC = () => {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ type: "spring", duration: 0.5 }}
-      className="w-full max-w-md mx-auto bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 relative border border-gray-700"
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 25,
+        duration: 0.5,
+      }}
+      className="w-full max-w-md mx-auto bg-gradient-to-br from-indigo-950/80 to-purple-950/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-indigo-500/20 p-6 md:p-8 relative border border-white/10"
     >
       <button
         onClick={clearSelectedUser}
-        className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+        className="absolute top-4 right-4 text-indigo-100/60 hover:text-white transition-colors duration-200"
         aria-label="Close profile"
       >
         <X size={24} />
@@ -70,14 +75,16 @@ const UserProfileCard: React.FC = () => {
           alt={login}
           width={128}
           height={128}
-          className="rounded-full border-4 border-teal-500"
+          className="rounded-full border-4 border-indigo-500/50 shadow-lg shadow-indigo-500/30"
         />
-        <h1 className="mt-4 text-3xl font-bold text-white">{name || login}</h1>
-        <h2 className="text-xl text-gray-400">@{login}</h2>
-        <p className="mt-4 text-gray-300 max-w-xs">
+        <h1 className="mt-4 text-3xl font-bold text-white tracking-tight">
+          {name || login}
+        </h1>
+        <h2 className="text-xl text-indigo-100/80">@{login}</h2>
+        <p className="mt-4 text-indigo-100/70 max-w-xs">
           {bio || "This user has no bio."}
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-4 text-gray-300">
+        <div className="mt-6 flex flex-wrap justify-center gap-4 text-indigo-100/70">
           <div className="flex items-center gap-2">
             <Users size={18} />
             <span>
@@ -93,8 +100,8 @@ const UserProfileCard: React.FC = () => {
             </span>
           </div>
         </div>
-        <div className="mt-4 w-full border-t border-gray-700 my-6"></div>
-        <div className="flex flex-col items-center gap-2 text-gray-300">
+        <div className="mt-4 w-full border-t border-white/10 my-6"></div>
+        <div className="flex flex-col items-center gap-2 text-indigo-100/70">
           {company && (
             <div className="flex items-center gap-2">
               <Building size={16} />
@@ -106,7 +113,7 @@ const UserProfileCard: React.FC = () => {
               href={blog.startsWith("http") ? blog : `https://${blog}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-teal-400 hover:underline"
+              className="flex items-center gap-2 text-indigo-400 hover:text-indigo-300 hover:underline transition-colors duration-200"
             >
               <LinkIcon size={16} />
               <span>{blog}</span>
@@ -116,17 +123,17 @@ const UserProfileCard: React.FC = () => {
             href={html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-teal-600 text-white font-bold py-1 px-3 rounded-lg hover:bg-teal-700 transition-all duration-300 text-center mt-1"
+            className="w-full bg-indigo-600/80 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-500/80 hover:shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 text-center mt-2"
           >
             View Profile
           </a>
         </div>
 
         <div className="mt-8 w-full flex sm:flex-row gap-3">
-          <div className="w-full p-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
+          <div className="w-full p-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl shadow-md shadow-indigo-500/20">
             <button
               onClick={handleGeminiClick}
-              className="w-full bg-gray-800 text-gray-200 font-bold py-3 px-6 rounded-md hover:bg-transparent hover:text-white transition-all duration-300"
+              className="w-full bg-gradient-to-br from-indigo-950/80 to-purple-950/80 text-white font-bold py-3 px-6 rounded-xl hover:bg-transparent transition-all duration-300"
             >
               Ask Gemini
             </button>
@@ -140,10 +147,11 @@ const UserProfileCard: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-6 pt-6 border-t border-gray-700 text-left overflow-hidden"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="mt-6 pt-6 border-t border-white/10 text-left overflow-hidden"
           >
             {isGeminiLoading && (
-              <div className="flex justify-center items-center gap-2 text-gray-400">
+              <div className="flex justify-center items-center gap-2 text-indigo-100/60">
                 <LoaderCircle className="w-5 h-5 animate-spin" />
                 <span>Generating summary...</span>
               </div>
@@ -153,10 +161,10 @@ const UserProfileCard: React.FC = () => {
             )}
             {geminiSummary && (
               <div>
-                <h3 className="text-lg font-bold text-white mb-2">
+                <h3 className="text-lg font-bold text-white mb-2 tracking-tight">
                   Gemini Summary
                 </h3>
-                <p className="text-gray-300 whitespace-pre-wrap">
+                <p className="text-indigo-100/70 whitespace-pre-wrap">
                   {geminiSummary}
                 </p>
               </div>

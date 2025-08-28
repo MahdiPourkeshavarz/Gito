@@ -26,11 +26,11 @@ const SearchBar: React.FC = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search GitHub users"
-          className="w-full pl-12 pr-14 py-3 text-sm text-white bg-white/6 backdrop-blur-sm border border-white/6 rounded-2xl shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition"
+          className="w-6/8 pl-8 pr-10 py-3 text-sm text-white bg-white/6 backdrop-blur-sm border border-white/6 rounded-2xl shadow-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 transition ml-12"
           aria-label="Search GitHub users"
         />
 
-        <div className="absolute inset-y-0 right-2 flex items-center">
+        <div className="absolute inset-y-0 right-14 flex items-center">
           <button
             type="submit"
             aria-label="Search"
@@ -41,7 +41,7 @@ const SearchBar: React.FC = () => {
           </button>
         </div>
 
-        <div className="absolute left-0 right-0 top-full mt-2 pointer-events-none z-20">
+        <div className="absolute left-12 right-0 top-full mt-2 pointer-events-none z-20 w-6/8">
           <motion.div
             initial={{ width: 0, opacity: 0 }}
             animate={
