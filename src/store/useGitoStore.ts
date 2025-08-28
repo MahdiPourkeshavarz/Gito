@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
-import { GithubResponse, UserState } from "@/types";
+import { GithubResponse, RepoSummary, UserState } from "@/types";
 import apiClient from "@/libs/axiosClient";
 
 const USERS_PER_PAGE = 5;
@@ -14,6 +14,9 @@ export const useGitoStore = create<UserState>((set, get) => ({
   isLoadingMore: false,
   error: null,
   selectedUser: null,
+  geminiSummary: null,
+  isGeminiLoading: false,
+  geminiError: null,
   setQuery: (query) => set({ query }),
   searchUsers: async () => {
     const { query } = get();
@@ -75,5 +78,51 @@ export const useGitoStore = create<UserState>((set, get) => ({
 
   clearSelectedUser: () => {
     set({ selectedUser: null, error: null });
+  },
+
+  getGeminiSummary: async (username: string, bio: string) => {
+    set({ isGeminiLoading: true, geminiError: null, geminiSummary: null });
+    try {
+      const reposResponse = await apiClient.get(`/users/${username}/repos`);
+
+      const repoSummaries: RepoSummary[] = reposResponse.data.map(
+        (repo: any) => ({
+          name: repo.name,
+          description: repo.description,
+          language: repo.language,
+          topics: repo.topics,
+          stargazers_count: repo.stargazers_count,
+          forks_count: repo.forks_count,
+          pushed_at: repo.pushed_at,
+          fork: repo.fork,
+          bio,
+        })
+      );
+
+      const summaryResponse = await fetch("/api/summarize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ repos: repoSummaries }),
+      });
+
+      if (!summaryResponse.ok) {
+        const errorData = await summaryResponse.json();
+        throw new Error(
+          errorData.error || "Failed to get summary from the server."
+        );
+      }
+
+      const result = await summaryResponse.json();
+
+      set({ geminiSummary: result.summary, isGeminiLoading: false });
+    } catch (err: any) {
+      console.error("Error in getGeminiSummary:", err);
+      set({
+        geminiError: err.message || "An unexpected error occurred.",
+        isGeminiLoading: false,
+      });
+    }
   },
 }));

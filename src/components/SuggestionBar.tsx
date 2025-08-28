@@ -44,26 +44,48 @@ const SuggestionBar: React.FC = () => {
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        className="mt-2 w-full max-w-2xl px-2"
-      >
-        <div className="w-full p-2 bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-lg max-h-60 overflow-y-auto">
-          {users.map((user) => (
-            <SuggestionItem key={user.id} user={user} />
-          ))}
+      {/* only render when we have suggestions */}
+      {users?.length > 0 && (
+        <motion.div
+          key="suggestions"
+          initial={{ opacity: 0, y: -8, scale: 0.995 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -8, scale: 0.995 }}
+          transition={{ duration: 0.16, ease: "easeOut" }}
+          // absolute positioning so it doesn't change document flow
+          className="absolute left-0 right-0 top-full mt-2 z-40"
+          style={{ transformOrigin: "top center" }}
+        >
+          {/* container that won't block clicks outside; the list itself is interactive */}
+          <div className="pointer-events-none px-2">
+            <ul
+              role="listbox"
+              aria-label="Search suggestions"
+              className="pointer-events-auto w-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-lg max-h-60 overflow-y-auto shadow-xl divide-y divide-white/4"
+            >
+              {users.map((user) => (
+                <li key={user.id}>
+                  <SuggestionItem user={user} />
+                </li>
+              ))}
 
-          {users.length < totalCount && (
-            <div ref={ref} className="flex justify-center items-center h-10">
-              {isLoadingMore && (
-                <LoaderCircle className="w-5 h-5 text-teal-500 animate-spin" />
+              {users.length < totalCount && (
+                <li
+                  ref={ref}
+                  className="flex justify-center items-center h-10"
+                  aria-hidden={!isLoadingMore}
+                >
+                  {isLoadingMore && (
+                    <div className="w-8 h-8 flex items-center justify-center">
+                      <LoaderCircle className="w-5 h-5 text-teal-400 animate-spin" />
+                    </div>
+                  )}
+                </li>
               )}
-            </div>
-          )}
-        </div>
-      </motion.div>
+            </ul>
+          </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };

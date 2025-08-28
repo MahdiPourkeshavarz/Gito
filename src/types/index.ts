@@ -64,15 +64,31 @@ export interface UserState {
   isLoadingMore: boolean;
   error: string | null;
   selectedUser: GitHubUserProfile | null;
+  geminiSummary: string | null;
+  isGeminiLoading: boolean;
+  geminiError: string | null;
   setQuery: (query: string) => void;
   searchUsers: () => Promise<void>;
   loadMoreUsers: () => Promise<void>;
   selectUser: (username: string) => void;
   clearSelectedUser: () => void;
+  getGeminiSummary: (username: string, bio: string) => void;
 }
 
 export interface GithubResponse {
   total_count: number;
   incomplete_results: false;
   items: GitHubUser[];
+}
+
+export interface RepoSummary {
+  name: string;
+  description: string | null;
+  language: string | null;
+  topics: string[];
+  stargazers_count: number;
+  forks_count: number;
+  pushed_at: string;
+  fork: boolean;
+  bio: string;
 }

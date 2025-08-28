@@ -1,10 +1,32 @@
 import { useGitoStore } from "@/store/useGitoStore";
-import { motion } from "framer-motion";
-import { X, Users, UserPlus, Building, Link as LinkIcon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  X,
+  Users,
+  UserPlus,
+  Building,
+  Link as LinkIcon,
+  LoaderCircle,
+} from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const UserProfileCard: React.FC = () => {
-  const { selectedUser, clearSelectedUser } = useGitoStore();
+  const {
+    selectedUser,
+    isGeminiLoading,
+    geminiSummary,
+    geminiError,
+    clearSelectedUser,
+    getGeminiSummary,
+  } = useGitoStore();
+  const [isSummaryVisible, setIsSummaryVisible] = useState(false);
+
+  useEffect(() => {
+    if (selectedUser) {
+      getGeminiSummary(selectedUser?.login, selectedUser?.bio as string);
+    }
+  }, [selectedUser, getGeminiSummary]);
 
   if (!selectedUser) return null;
 
@@ -20,8 +42,14 @@ const UserProfileCard: React.FC = () => {
     bio,
   } = selectedUser;
 
+  const handleGeminiClick = () => {
+    setIsSummaryVisible(true);
+    if (isSummaryVisible) setIsSummaryVisible(false);
+  };
+
   return (
     <motion.div
+      layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -46,11 +74,9 @@ const UserProfileCard: React.FC = () => {
         />
         <h1 className="mt-4 text-3xl font-bold text-white">{name || login}</h1>
         <h2 className="text-xl text-gray-400">@{login}</h2>
-
         <p className="mt-4 text-gray-300 max-w-xs">
           {bio || "This user has no bio."}
         </p>
-
         <div className="mt-6 flex flex-wrap justify-center gap-4 text-gray-300">
           <div className="flex items-center gap-2">
             <Users size={18} />
@@ -67,9 +93,7 @@ const UserProfileCard: React.FC = () => {
             </span>
           </div>
         </div>
-
         <div className="mt-4 w-full border-t border-gray-700 my-6"></div>
-
         <div className="flex flex-col items-center gap-2 text-gray-300">
           {company && (
             <div className="flex items-center gap-2">
@@ -88,17 +112,58 @@ const UserProfileCard: React.FC = () => {
               <span>{blog}</span>
             </a>
           )}
+          <a
+            href={html_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-teal-600 text-white font-bold py-1 px-3 rounded-lg hover:bg-teal-700 transition-all duration-300 text-center mt-1"
+          >
+            View Profile
+          </a>
         </div>
 
-        <a
-          href={html_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-8 w-full bg-teal-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-700 transition-all duration-300"
-        >
-          View GitHub Profile
-        </a>
+        <div className="mt-8 w-full flex sm:flex-row gap-3">
+          <div className="w-full p-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg">
+            <button
+              onClick={handleGeminiClick}
+              className="w-full bg-gray-800 text-gray-200 font-bold py-3 px-6 rounded-md hover:bg-transparent hover:text-white transition-all duration-300"
+            >
+              Ask Gemini
+            </button>
+          </div>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {isSummaryVisible && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-6 pt-6 border-t border-gray-700 text-left overflow-hidden"
+          >
+            {isGeminiLoading && (
+              <div className="flex justify-center items-center gap-2 text-gray-400">
+                <LoaderCircle className="w-5 h-5 animate-spin" />
+                <span>Generating summary...</span>
+              </div>
+            )}
+            {geminiError && (
+              <p className="text-red-400 text-center">{geminiError}</p>
+            )}
+            {geminiSummary && (
+              <div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Gemini Summary
+                </h3>
+                <p className="text-gray-300 whitespace-pre-wrap">
+                  {geminiSummary}
+                </p>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };
