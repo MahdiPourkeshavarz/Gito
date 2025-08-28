@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
-import { GithubResponse, UserState } from "@/types"; // Assuming you have path aliases setup
+import { GithubResponse, UserState } from "@/types";
 import apiClient from "@/libs/axiosClient";
+
+const USERS_PER_PAGE = 5;
 
 export const useGitoStore = create<UserState>((set, get) => ({
   query: "",
@@ -11,6 +13,7 @@ export const useGitoStore = create<UserState>((set, get) => ({
   isLoading: false,
   isLoadingMore: false,
   error: null,
+  selectedUser: null,
   setQuery: (query) => set({ query }),
   searchUsers: async () => {
     const { query } = get();
@@ -21,7 +24,7 @@ export const useGitoStore = create<UserState>((set, get) => ({
     set({ isLoading: true, error: null, users: [], page: 1, totalCount: 0 });
     try {
       const response = await apiClient.get(
-        `search/users?q=${query}&per_page=20&page=1`
+        `search/users?q=${query}&per_page=${USERS_PER_PAGE}`
       );
       const data: GithubResponse = response.data;
       set({
@@ -43,7 +46,7 @@ export const useGitoStore = create<UserState>((set, get) => ({
     set({ isLoadingMore: true });
     try {
       const response = await apiClient.get(
-        `/search/users?q=${query}&per_page=20&page=${nextPage}`
+        `/search/users?q=${query}&per_page=${USERS_PER_PAGE}&page=${nextPage}`
       );
       const data: GithubResponse = response.data;
       set((state) => ({
@@ -56,5 +59,21 @@ export const useGitoStore = create<UserState>((set, get) => ({
         err.response?.data?.message || "Failed to load more users.";
       set({ error: errorMessage, isLoadingMore: false });
     }
+  },
+
+  selectUser: async (username: string) => {
+    set({ isLoading: true, error: null, users: [], query: "" });
+    try {
+      const response = await apiClient.get(`users/${username}`);
+      set({ selectedUser: response.data, isLoading: false });
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message || "Could not fetch user profile.";
+      set({ error: errorMessage, isLoading: false });
+    }
+  },
+
+  clearSelectedUser: () => {
+    set({ selectedUser: null, error: null });
   },
 }));
