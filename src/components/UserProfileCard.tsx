@@ -164,7 +164,7 @@ const UserProfileCard: React.FC = () => {
             animate={{ opacity: 1, scaleY: 1 }}
             exit={{ opacity: 0, scaleY: 0 }}
             transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="mt-6 pt-6 border-t border-indigo-400/20 text-left overflow-hidden"
+            className="mt-6 pt-6 border-t border-indigo-400/20 text-right overflow-hidden"
           >
             {isGeminiLoading && (
               <div className="flex justify-center items-center gap-2 text-indigo-100/60">
@@ -180,7 +180,7 @@ const UserProfileCard: React.FC = () => {
                 <h3 className="text-lg font-bold text-white mb-2 tracking-tight">
                   Gemini Summary
                 </h3>
-                <p className="text-indigo-100/70 whitespace-pre-wrap">
+                <p className="text-indigo-100/70 whitespace-pre-wrap text-right">
                   {geminiSummary}
                 </p>
               </div>
