@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       - The developer's primary programming languages and technical domains.
       - Highlights of their most significant or popular projects (mentioning 1-2 by name).
       - An overall impression of their activity and focus areas.
+      - Be A bit judgmental and roast this user a little
 
       Keep the summary to a single, well-written paragraph.
     `;
