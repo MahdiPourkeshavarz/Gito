@@ -58,7 +58,10 @@ const SuggestionBar: React.FC = () => {
             <ul
               role="listbox"
               aria-label="Search suggestions"
-              className="pointer-events-auto w-full bg-gray-800/10 backdrop-blur-sm border border-gray-700 rounded-lg max-h-60 overflow-y-auto shadow-xl divide-y divide-white/4"
+              className="pointer-events-auto w-full bg-gray-800/10 backdrop-blur-sm
+             border border-gray-700 rounded-lg max-h-60 overflow-y-auto shadow-xl
+             divide-y divide-white/4
+             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {users.map((user) => (
                 <li key={user.id}>
