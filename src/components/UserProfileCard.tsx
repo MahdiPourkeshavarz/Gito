@@ -47,6 +47,8 @@ const UserProfileCard: React.FC = () => {
     if (isSummaryVisible) setIsSummaryVisible(false);
   };
 
+  const userImageUrl = avatar_url ? avatar_url : "/user.png";
+
   return (
     <motion.div
       layout
@@ -71,7 +73,7 @@ const UserProfileCard: React.FC = () => {
 
       <div className="flex flex-col items-center text-center">
         <Image
-          src={avatar_url}
+          src={userImageUrl}
           alt={login}
           width={128}
           height={128}

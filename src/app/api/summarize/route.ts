@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
       - Highlights of their most significant or popular projects (mentioning 1-2 by name).
       - An overall impression of their activity and focus areas.
       - Be A bit judgmental and roast this user a little
+      - Your answer should be totally in a friendly tone farsi language
 
       Keep the summary to a single, well-written paragraph.
     `;
