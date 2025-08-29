@@ -59,6 +59,7 @@ export interface UserState {
   query: string;
   users: GitHubUser[];
   totalCount: number;
+  isWelcomeFinished: boolean;
   page: number;
   isLoading: boolean;
   isLoadingMore: boolean;
@@ -73,6 +74,7 @@ export interface UserState {
   selectUser: (username: string) => void;
   clearSelectedUser: () => void;
   getGeminiSummary: (username: string, bio: string) => void;
+  setIsWelcomeFinished: () => void;
 }
 
 export interface GithubResponse {

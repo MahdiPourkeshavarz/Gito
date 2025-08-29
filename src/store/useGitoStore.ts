@@ -9,6 +9,7 @@ export const useGitoStore = create<UserState>((set, get) => ({
   query: "",
   users: [],
   totalCount: 0,
+  isWelcomeFinished: false,
   page: 1,
   isLoading: false,
   isLoadingMore: false,
@@ -41,6 +42,7 @@ export const useGitoStore = create<UserState>((set, get) => ({
       set({ error: errorMessage, isLoading: false, users: [] });
     }
   },
+  setIsWelcomeFinished: () => set({ isWelcomeFinished: true }),
   loadMoreUsers: async () => {
     const { query, page, users, totalCount } = get();
     if (users.length >= totalCount || get().isLoadingMore) return;

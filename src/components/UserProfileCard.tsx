@@ -50,16 +50,16 @@ const UserProfileCard: React.FC = () => {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{
-        type: "spring",
-        stiffness: 300,
-        damping: 25,
-        duration: 0.5,
-      }}
-      className="w-full max-w-md mx-auto bg-gradient-to-br from-indigo-950/80 to-purple-950/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-indigo-500/20 p-6 md:p-8 relative border border-white/10"
+      initial={{ opacity: 0, y: 40, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -40, scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 200, damping: 25 }}
+      className="w-full max-w-md mx-auto
+                 bg-gradient-to-br from-indigo-900/70 via-purple-900/60 to-fuchsia-900/70
+                 backdrop-blur-xl rounded-3xl
+                 shadow-2xl shadow-indigo-500/20
+                 p-6 md:p-8 relative
+                 border border-indigo-400/20"
     >
       <button
         onClick={clearSelectedUser}
@@ -75,7 +75,9 @@ const UserProfileCard: React.FC = () => {
           alt={login}
           width={128}
           height={128}
-          className="rounded-full border-4 border-indigo-500/50 shadow-lg shadow-indigo-500/30"
+          className="rounded-full border-4 border-indigo-500/50
+                     shadow-lg shadow-indigo-500/30
+                     animate-pulse-slow"
         />
         <h1 className="mt-4 text-3xl font-bold text-white tracking-tight">
           {name || login}
@@ -84,6 +86,7 @@ const UserProfileCard: React.FC = () => {
         <p className="mt-4 text-indigo-100/70 max-w-xs">
           {bio || "This user has no bio."}
         </p>
+
         <div className="mt-6 flex flex-wrap justify-center gap-4 text-indigo-100/70">
           <div className="flex items-center gap-2">
             <Users size={18} />
@@ -100,7 +103,9 @@ const UserProfileCard: React.FC = () => {
             </span>
           </div>
         </div>
-        <div className="mt-4 w-full border-t border-white/10 my-6"></div>
+
+        <div className="mt-4 w-full border-t border-indigo-400/20 my-6"></div>
+
         <div className="flex flex-col items-center gap-2 text-indigo-100/70">
           {company && (
             <div className="flex items-center gap-2">
@@ -123,32 +128,41 @@ const UserProfileCard: React.FC = () => {
             href={html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-indigo-600/80 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-500/80 hover:shadow-lg hover:shadow-indigo-500/30 transition-all duration-300 text-center mt-2"
+            className="w-full bg-indigo-600/80 backdrop-blur-sm
+                       text-white font-bold py-2 px-4 rounded-xl
+                       hover:bg-indigo-500/80 hover:shadow-lg hover:shadow-indigo-500/30
+                       transition-all duration-300 text-center mt-2"
           >
             View Profile
           </a>
         </div>
 
         <div className="mt-8 w-full flex sm:flex-row gap-3">
-          <div className="w-full p-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl shadow-md shadow-indigo-500/20">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="w-full p-0.5 bg-gradient-to-r from-indigo-500 to-fuchsia-500 rounded-xl shadow-md shadow-indigo-500/20"
+          >
             <button
               onClick={handleGeminiClick}
-              className="w-full bg-gradient-to-br from-indigo-950/80 to-purple-950/80 text-white font-bold py-3 px-6 rounded-xl hover:bg-transparent transition-all duration-300"
+              className="w-full bg-gradient-to-br from-indigo-950/80 to-purple-950/80
+                         text-white font-bold py-3 px-6 rounded-xl
+                         hover:bg-transparent transition-all duration-300"
             >
               Ask Gemini
             </button>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       <AnimatePresence>
         {isSummaryVisible && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="mt-6 pt-6 border-t border-white/10 text-left overflow-hidden"
+            initial={{ opacity: 0, scaleY: 0, originY: 0 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            exit={{ opacity: 0, scaleY: 0 }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
+            className="mt-6 pt-6 border-t border-indigo-400/20 text-left overflow-hidden"
           >
             {isGeminiLoading && (
               <div className="flex justify-center items-center gap-2 text-indigo-100/60">
